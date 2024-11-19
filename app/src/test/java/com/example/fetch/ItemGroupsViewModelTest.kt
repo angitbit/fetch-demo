@@ -24,8 +24,10 @@ class ItemGroupsViewModelTest {
     private val item2 = FetchItem(2)
     private val item3 = FetchItem(1)
     private val item4 = FetchItem(3)
+    private val item5 = FetchItem(1)
+    private val item6 = FetchItem(2)
     //mix Item order to test ViewModel grouping/sort
-    private val items = listOf(item2, item1, item3, item4)
+    private val items = listOf(item2, item1, item3, item4, item5)
     private val itemFakeSource = ItemFakeSource(items)
     private lateinit var itemRepository: ItemRepository
     private lateinit var viewModel: ItemGroupsViewModel
@@ -37,6 +39,8 @@ class ItemGroupsViewModelTest {
         item2.name = "item2"
         item3.name = "item3"
         item4.name = "item4"
+        item5.name = ""     //test items w/ blank names will be removed
+        item6.name = null   //test items w/ null names will be removed
         itemRepository = ItemRepository(itemFakeSource)
         viewModel = ItemGroupsViewModel(itemRepository)
 
