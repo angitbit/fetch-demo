@@ -1,6 +1,7 @@
 package com.example.fetch.fetch
 
-//holds item data from FetchApi; Comparable allows for custom sort
+//holds item data from FetchApi; Comparable allows for custom sort;
+//this is the Model, the 1st M in MVVM architecture
 data class FetchItem(var listId:Int) : Comparable<FetchItem>{
     private var id:Int= 0 //unused for now but is sent by api
     var name:String?= null
