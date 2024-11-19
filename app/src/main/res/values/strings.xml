@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Fetch</string>
+
+    <string name="items_grouped">Items Grouped By List ID</string>
+    <string name="list_id">List ID</string>
+    <string name="load_error">Unable to get items</string>
+    <string name="load_error_subtext">Please check your Internet connection then retry by rotating your device or quitting and relaunching app.</string>
+</resources>
