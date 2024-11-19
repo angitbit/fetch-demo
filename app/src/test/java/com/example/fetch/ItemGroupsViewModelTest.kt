@@ -5,6 +5,7 @@ import com.example.fetch.data.source.ItemFakeSource
 import com.example.fetch.fetch.FetchItem
 import com.example.fetch.item_groups.ItemGroup
 import com.example.fetch.item_groups.ItemGroupsViewModel
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.newSingleThreadContext
@@ -17,7 +18,7 @@ import org.junit.Before
 import org.junit.Test
 
 class ItemGroupsViewModelTest {
-    @OptIn(ExperimentalCoroutinesApi::class)
+    @OptIn(ExperimentalCoroutinesApi::class, DelicateCoroutinesApi::class)
     private val mainThreadSurrogate = newSingleThreadContext("UI thread")
     private val item1 = FetchItem(2)
     private val item2 = FetchItem(2)
