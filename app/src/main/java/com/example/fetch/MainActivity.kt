@@ -15,7 +15,7 @@ import com.example.fetch.item_groups.ItemGroupsScreen
 import com.example.fetch.item_groups.ItemGroupsScreenState
 import com.example.fetch.item_groups.ItemGroupsViewModel
 
-//handles MainScreen of app
+//handles MainScreen of app that retrieves a list of JSON data and displays all the items grouped by "listId", //sorted first by "listId" then by "name" and filtering out any items where "name" is blank or null.
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

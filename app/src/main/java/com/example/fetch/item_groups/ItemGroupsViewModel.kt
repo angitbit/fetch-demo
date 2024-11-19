@@ -13,12 +13,17 @@ import com.example.fetch.data.ItemRepository
 import com.example.fetch.fetch.FetchItem
 import kotlinx.coroutines.launch
 
+//denotes State of ItemGroupsScreen so that ItemGroupsViewModel can update UI/View
 data class ItemGroupsScreenState(
     val isLoading: Boolean = false,
     val itemGroups: List<ItemGroup> = emptyList(),
     val gotError: Boolean = false
 )
 
+//this ViewModel [the VM in MVVM architecture] gets data/Model [the 1st M in MVVM] from ItemRepository
+//and updates UI/View [the 1st V in MVVM] via ItemGroupsScreenState;
+//It retrieves a list of JSON data and groups all the items by "listId", sorted first by "listId" then by 
+//"name" and filtering out any items where "name" is blank or null.
 class ItemGroupsViewModel(private val itemRepository: ItemRepository) : ViewModel() {
     var itemGroups:List<ItemGroup>? = null
     private val _state = mutableStateOf(ItemGroupsScreenState())

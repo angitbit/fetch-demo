@@ -30,7 +30,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.fetch.R
 
-@OptIn(ExperimentalMaterial3Api::class)
+//Screen that displays items grouped by "listId", sorted first by "listId" then by "name";
+//also shows a loading or error view when relevant
+@OptIn(ExperimentalMaterial3Api::class) //for TopAppBar
 @Composable
 fun ItemGroupsScreen(itemGroupsScreenState: ItemGroupsScreenState) {
     val margin = dimensionResource(R.dimen.margin)
@@ -50,6 +52,7 @@ fun ItemGroupsScreen(itemGroupsScreenState: ItemGroupsScreenState) {
         }
     ) { innerPadding ->
         if (itemGroupsScreenState.isLoading) {
+            // show loading view 
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -78,6 +81,7 @@ private fun ItemsLoadingPreview() {
     ItemGroupsScreen(itemGroupsScreenState)
 }
 
+// shows error view 
 @Composable
 private fun ItemsError() {
     val margin = dimensionResource(R.dimen.margin)
@@ -104,6 +108,7 @@ private fun ItemsErrorPreview() {
     ItemGroupsScreen(itemGroupsScreenState)
 }
 
+// displays a scrollable list of groups of item name(s) w/ same listId
 @Composable
 private fun ItemGroupsList(itemGroups: List<ItemGroup>, innerPadding: PaddingValues) {
     LazyColumn(
