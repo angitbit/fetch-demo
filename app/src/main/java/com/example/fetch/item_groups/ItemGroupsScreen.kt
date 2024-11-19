@@ -117,7 +117,7 @@ private fun ItemGroupsList(itemGroups: List<ItemGroup>, innerPadding: PaddingVal
             .padding(innerPadding)
     ) {
         items(itemGroups) { item ->
-            Item(item.names, item.listId)
+            ItemGroup(item.names, item.listId)
         }
     }
 }
@@ -132,8 +132,9 @@ private fun ItemGroupsListPreview() {
     ItemGroupsScreen(itemGroupsScreenState)
 }
 
+// displays a group of item name(s) w/ same listId
 @Composable
-private fun Item(names: List<String>, listId: Int) {
+private fun ItemGroup(names: List<String>, listId: Int) {
     val listIdStr = stringResource(R.string.list_id)
     val margin = dimensionResource(R.dimen.margin)
     Card(
@@ -158,6 +159,6 @@ private fun Item(names: List<String>, listId: Int) {
 
 @Preview
 @Composable
-private fun ItemPreview() {
-    Item(listOf("name1", "name2"), 123)
+private fun ItemGroupPreview() {
+    ItemGroup(listOf("name1", "name2"), 123)
 }
