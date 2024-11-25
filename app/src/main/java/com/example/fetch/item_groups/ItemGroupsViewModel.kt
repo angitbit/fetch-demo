@@ -25,12 +25,11 @@ data class ItemGroupsScreenState(
 //It retrieves a list of JSON data and groups all the items by "listId", sorted first by "listId" then by 
 //"name" and filtering out any items where "name" is blank or null.
 class ItemGroupsViewModel(private val itemRepository: ItemRepository) : ViewModel() {
-    var itemGroups:List<ItemGroup>? = null
     private val _state = mutableStateOf(ItemGroupsScreenState())
     val state: State<ItemGroupsScreenState> = _state
 
     fun loadItems() {
-        itemGroups?.let{
+        if(_state.value.itemGroups.isNotEmpty()){
             return //avoid reload
         }
         viewModelScope.launch {
@@ -38,7 +37,6 @@ class ItemGroupsViewModel(private val itemRepository: ItemRepository) : ViewMode
                 //init UI state
                 _state.value = _state.value.copy(
                     isLoading = true,
-                    itemGroups = _state.value.itemGroups,
                     gotError = false
                 )
                 val namedItems = getNamedItems(itemRepository.getFetchItems())
@@ -46,12 +44,11 @@ class ItemGroupsViewModel(private val itemRepository: ItemRepository) : ViewMode
                 //update UI state
                 _state.value =
                     _state.value.copy(isLoading = false, itemGroups = newGroups, gotError = false)
-                itemGroups = newGroups
+
             } catch (ex: Exception) {
                 //update UI state
                 _state.value = _state.value.copy(
                     isLoading = false,
-                    itemGroups = emptyList(),
                     gotError = true
                 )
                 val errorMsg = ex.message ?: "loadItems error"

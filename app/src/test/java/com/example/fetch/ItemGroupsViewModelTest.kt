@@ -56,7 +56,6 @@ class ItemGroupsViewModelTest {
             advanceUntilIdle() //wait for loadItems
 
             assert(!viewModel.state.value.isLoading)
-            assert(viewModel.state.value.itemGroups == viewModel.itemGroups)
             assert(viewModel.state.value.itemGroups.size == 3)
             //verify ItemGroup & name order
             assert(viewModel.state.value.itemGroups[0] == ItemGroup(1, mutableListOf(item3.name!!)))
