@@ -8,18 +8,16 @@ import com.example.fetch.item_groups.ItemGroupsViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.newSingleThreadContext
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
 class ItemGroupsViewModelTest {
     @OptIn(ExperimentalCoroutinesApi::class, DelicateCoroutinesApi::class)
-    private val mainThreadSurrogate = newSingleThreadContext("UI thread")
     private val item1 = FetchItem(2)
     private val item2 = FetchItem(2)
     private val item3 = FetchItem(1)
@@ -44,28 +42,33 @@ class ItemGroupsViewModelTest {
         itemRepository = ItemRepository(itemFakeSource)
         viewModel = ItemGroupsViewModel(itemRepository)
 
-        Dispatchers.setMain(mainThreadSurrogate)
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain() // reset the main dispatcher to the original Main dispatcher
-        mainThreadSurrogate.close()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun loadItems() = runTest {
-        viewModel.loadItems()
-        advanceUntilIdle() //wait for loadItems
+        val testDispatcher = UnconfinedTestDispatcher(testScheduler)
+        //Main dispatcher that wraps the Android UI thread will be unavailable here, as these tests are executed on a local JVM and not an Android;
+        //viewModelScope uses a hardcoded Main dispatcher so we've to Dispatchers.setMain to test
+        Dispatchers.setMain(testDispatcher)
+        try {
+            viewModel.loadItems()
+            advanceUntilIdle() //wait for loadItems
 
-        assert(!viewModel.state.value.isLoading)
-        assert(viewModel.state.value.itemGroups == viewModel.itemGroups)
-        assert(viewModel.state.value.itemGroups.size == 3)
-        //verify ItemGroup & name order
-        assert(viewModel.state.value.itemGroups[0] == ItemGroup(1, mutableListOf(item3.name!!)))
-        assert(viewModel.state.value.itemGroups[1] == ItemGroup(2, mutableListOf(item1.name!!, item2.name!!)))
-        assert(viewModel.state.value.itemGroups[2] == ItemGroup(3, mutableListOf(item4.name!!)))
+            assert(!viewModel.state.value.isLoading)
+            assert(viewModel.state.value.itemGroups == viewModel.itemGroups)
+            assert(viewModel.state.value.itemGroups.size == 3)
+            //verify ItemGroup & name order
+            assert(viewModel.state.value.itemGroups[0] == ItemGroup(1, mutableListOf(item3.name!!)))
+            assert(
+                viewModel.state.value.itemGroups[1] == ItemGroup(
+                    2,
+                    mutableListOf(item1.name!!, item2.name!!)
+                )
+            )
+            assert(viewModel.state.value.itemGroups[2] == ItemGroup(3, mutableListOf(item4.name!!)))
+        } finally {
+            Dispatchers.resetMain()
+        }
     }
 }
